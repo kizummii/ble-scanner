@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,15 +24,18 @@ jobs:
             git zip unzip openjdk-17-jdk \
             python3-pip autoconf libtool \
             pkg-config zlib1g-dev libncurses5-dev \
-            libncursesw5-dev libtinfo5 cmake libffi-dev \
-            libssl-dev libltdl-dev
+            libncursesw5-dev cmake libffi-dev \
+            libssl-dev libltdl-dev \
+            libsqlite3-dev libbz2-dev \
+            libreadline-dev llvm \
+            libstdc++-12-dev
 
       - name: Install Buildozer
-        run: pip install buildozer cython
+        run: pip install --user buildozer cython
 
       - name: Build with Buildozer
         run: |
-          cd ${{ github.workspace }}
+          export PATH=$HOME/.local/bin:$PATH
           buildozer android debug
 
       - name: Upload APK
