@@ -25,7 +25,16 @@ jobs:
             zlib1g-dev libncurses5-dev libncursesw5-dev \
             cmake libffi-dev libssl-dev libltdl-dev \
             libsqlite3-dev libbz2-dev libreadline-dev \
-            llvm libstdc++-12-dev openjdk-17-jdk
+            llvm libstdc++-12-dev openjdk-17-jdk ccache
+
+      - name: Verify Android SDK
+        run: |
+          SDK=/usr/local/lib/android/sdk
+          echo "SDK at: $SDK"
+          ls $SDK/build-tools/ 2>/dev/null || echo "No build-tools"
+          ls $SDK/platforms/ 2>/dev/null || echo "No platforms"
+          ls $SDK/ndk/ 2>/dev/null || echo "No NDK"
+          ls $SDK/cmdline-tools/ 2>/dev/null || echo "No cmdline-tools"
 
       - name: Install Buildozer
         run: pip install --user buildozer cython
@@ -33,8 +42,6 @@ jobs:
       - name: Build APK
         run: |
           export PATH=$HOME/.local/bin:$PATH
-          # Clear conflicting SDK env vars so Buildozer manages its own
-          unset ANDROID_HOME ANDROID_SDK_ROOT ANDROID_NDK_HOME ANDROID_NDK_ROOT
           buildozer android debug
 
       - name: Upload APK

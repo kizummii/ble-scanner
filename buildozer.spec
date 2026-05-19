@@ -15,11 +15,11 @@ fullscreen = 1
 android.permissions = ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, BLUETOOTH, BLUETOOTH_ADMIN, BLUETOOTH_SCAN, BLUETOOTH_CONNECT
 android.api = 33
 android.minapi = 21
-android.ndk = 25c
+android.ndk = 27c
 android.build_tools = 33.0.2
-# p4a uses its own NDK download
-android.sdk_manager = sdkmanager
 android.accept_sdk_license = True
+android.sdk_path = /usr/local/lib/android/sdk
+android.ndk_path = /usr/local/lib/android/sdk/ndk/27.3.13750724
 android.gradle_dependencies =
 android.add_src =
 
