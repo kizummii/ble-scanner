@@ -21,7 +21,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y \
-            git zip unzip openjdk-17-jdk default-jdk \
+            git zip unzip openjdk-17-jdk \
             python3-pip autoconf libtool \
             pkg-config zlib1g-dev libncurses5-dev \
             libncursesw5-dev cmake libffi-dev \
@@ -30,27 +30,12 @@ jobs:
             libreadline-dev llvm \
             libstdc++-12-dev
 
-      - name: Install Android SDK cmdline-tools
-        run: |
-          mkdir -p $HOME/android/cmdline-tools
-          cd $HOME/android
-          curl -sL -o cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-          unzip -q cmdline-tools.zip -d cmdline-tools
-          mv cmdline-tools/cmdline-tools cmdline-tools/latest
-          export ANDROID_HOME=$HOME/android
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null 2>&1 || true
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;27.0.12077973" > /dev/null 2>&1 || true
-          echo "ANDROID_HOME=$HOME/android" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=$HOME/android" >> $GITHUB_ENV
-
       - name: Install Buildozer
         run: pip install --user buildozer cython
 
       - name: Build with Buildozer
         run: |
           export PATH=$HOME/.local/bin:$PATH
-          export ANDROID_HOME=$HOME/android
-          export ANDROID_SDK_ROOT=$HOME/android
           buildozer android debug
 
       - name: Upload APK

@@ -16,6 +16,8 @@ android.permissions = ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, BLUETOOTH, B
 android.api = 34
 android.minapi = 21
 android.ndk = 27c
+android.build_tools = 34.0.0
+android.accept_sdk_license = True
 android.gradle_dependencies =
 android.add_src =
 
