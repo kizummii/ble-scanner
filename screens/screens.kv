@@ -1,0 +1,231 @@
+#:kivy 2.0.0
+#:import MDScreen kivymd.uix.screen.MDScreen
+#:import MDTopAppBar kivymd.uix.toolbar.MDTopAppBar
+#:import MDRectangleFlatButton kivymd.uix.button.MDRectangleFlatButton
+#:import MDIconButton kivymd.uix.button.MDIconButton
+#:import MDBoxLayout kivymd.uix.boxlayout.MDBoxLayout
+#:import MDLabel kivymd.uix.label.MDLabel
+
+
+<ModeSelectScreen>:
+    name: "mode_select"
+    md_bg_color: 0, 0, 0, 1
+
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 0, 0, 0, 1
+        padding: "20dp"
+        spacing: "15dp"
+
+        MDTopAppBar:
+            title: "设置设备模式"
+            specific_text_color: 1, 1, 1, 1
+            md_bg_color: 0, 0, 0, 1
+            elevation: 0
+
+        MDLabel:
+            text: "1. 请开启扫码器，扫描下方二维码。扫码器成功识别编码后，将切换为透传模式。"
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: self.texture_size[1]
+            font_size: "15sp"
+
+        MDLabel:
+            text: "2. 当切换完成，点击\"继续\"按钮进行下一步。"
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: self.texture_size[1]
+            font_size: "15sp"
+
+        BoxLayout:
+            size_hint: None, None
+            size: "280dp", "280dp"
+            pos_hint: {"center_x": 0.5}
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10]
+            Image:
+                id: qr_image
+                size_hint: None, None
+                size: "240dp", "240dp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+        Widget:
+
+        MDRectangleFlatButton:
+            text: "继续"
+            size_hint: None, None
+            size: "280dp", "55dp"
+            pos_hint: {"center_x": 0.5}
+            theme_text_color: "Custom"
+            text_color: 0, 0, 0, 1
+            md_bg_color: 1, 1, 1, 1
+            on_release: root.on_continue()
+
+
+<DeviceIdentifyScreen>:
+    name: "device_identify"
+    md_bg_color: 0, 0, 0, 1
+
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 0, 0, 0, 1
+        padding: "20dp"
+        spacing: "15dp"
+
+        MDTopAppBar:
+            title: "配对扫码器"
+            specific_text_color: 1, 1, 1, 1
+            md_bg_color: 0, 0, 0, 1
+            elevation: 0
+
+        MDLabel:
+            text: "请用扫码器扫描下方二维码完成配对。"
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: self.texture_size[1]
+            font_size: "15sp"
+
+        BoxLayout:
+            size_hint: None, None
+            size: "280dp", "280dp"
+            pos_hint: {"center_x": 0.5}
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10]
+            Image:
+                id: qr_image
+                size_hint: None, None
+                size: "240dp", "240dp"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+        MDLabel:
+            id: tv_flag
+            text: ""
+            color: 0, 1, 0, 1
+            font_size: "24sp"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        Widget:
+
+        MDRectangleFlatButton:
+            text: "连接"
+            size_hint: None, None
+            size: "280dp", "55dp"
+            pos_hint: {"center_x": 0.5}
+            theme_text_color: "Custom"
+            text_color: 0, 0, 0, 1
+            md_bg_color: 1, 1, 1, 1
+            on_release: root.on_connect()
+
+
+<BleScanScreen>:
+    name: "ble_scan"
+    md_bg_color: 0, 0, 0, 1
+
+    MDBoxLayout:
+        orientation: "vertical"
+        md_bg_color: 0, 0, 0, 1
+
+        MDTopAppBar:
+            id: toolbar
+            title: root.connection_status
+            specific_text_color: 1, 1, 1, 1
+            md_bg_color: 0, 0, 0, 1
+            elevation: 0
+            left_action_items:
+                [["arrow-left", lambda x: root.on_back()]]
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: "15dp"
+            spacing: "5dp"
+
+            MDLabel:
+                text: "NAME：" + root.device_name
+                color: 1, 1, 1, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "ADDRESS：" + root.device_mac
+                color: 1, 1, 1, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "RSSI：" + root.device_rssi
+                color: 1, 1, 1, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "扫描数据："
+                color: 0, 1, 0, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            RecycleView:
+                id: data_list
+                viewclass: "MDLabel"
+                data:
+                    [{"text": item,
+                      "color": [1, 1, 1, 1],
+                      "size_hint_y": None,
+                      "height": 30}
+                     for item in root.scan_data]
+                RecycleBoxLayout:
+                    default_size: None, dp(30)
+                    default_size_hint: 1, None
+                    orientation: "vertical"
+                    spacing: "3dp"
+
+        BoxLayout:
+            size_hint_y: None
+            height: "55dp"
+            padding: "20dp", "5dp"
+            spacing: "20dp"
+
+            MDRectangleFlatButton:
+                id: btn_conn
+                text: "连接"
+                disabled: not root.btn_conn_enabled
+                on_release: root.on_connect_click()
+
+            MDRectangleFlatButton:
+                id: btn_disconn
+                text: "断开"
+                disabled: not root.btn_disconn_enabled
+                on_release: root.on_disconnect_click()
+
+        BoxLayout:
+            size_hint_y: None
+            height: "50dp"
+            spacing: "10dp"
+            padding: "10dp", "5dp"
+
+            MDRectangleFlatButton:
+                text: "震动 ON"
+                on_release: root.send_at_command("AT+VIBRATE+ON")
+
+            MDRectangleFlatButton:
+                text: "震动 OFF"
+                on_release: root.send_at_command("AT+VIBRATE+OFF")
+
+            MDRectangleFlatButton:
+                text: "蜂鸣 ON"
+                on_release: root.send_at_command("AT+BUZZER+ON")
+
+            MDRectangleFlatButton:
+                text: "蜂鸣 OFF"
+                on_release: root.send_at_command("AT+BUZZER+OFF")
