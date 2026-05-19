@@ -36,6 +36,8 @@ jobs:
       - name: Build with Buildozer
         run: |
           export PATH=$HOME/.local/bin:$PATH
+          # Clear pre-installed Android SDK/NDK env vars to avoid conflicts
+          unset ANDROID_HOME ANDROID_SDK_ROOT ANDROID_NDK_HOME ANDROID_NDK_ROOT
           buildozer android debug
 
       - name: Upload APK
