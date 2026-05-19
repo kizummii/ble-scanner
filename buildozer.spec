@@ -13,10 +13,9 @@ fullscreen = 1
 
 # Permissions
 android.permissions = ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, BLUETOOTH, BLUETOOTH_ADMIN, BLUETOOTH_SCAN, BLUETOOTH_CONNECT
-android.api = 33
+android.api = 34
 android.minapi = 21
-android.ndk = 25b
-android.sdk = 33
+android.ndk = 27c
 android.gradle_dependencies =
 android.add_src =
 
