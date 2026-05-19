@@ -12,11 +12,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build APK
-        uses: ArtemSBulgakov/buildozer-action@v1
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
         with:
-          workdir: .
-          buildozer_version: stable
+          python-version: "3.11"
+
+      - name: Install system deps
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            git zip unzip autoconf libtool pkg-config \
+            zlib1g-dev libncurses5-dev libncursesw5-dev \
+            cmake libffi-dev libssl-dev libltdl-dev \
+            libsqlite3-dev libbz2-dev libreadline-dev \
+            llvm libstdc++-12-dev openjdk-17-jdk
+
+      - name: Install Buildozer
+        run: pip install --user buildozer cython
+
+      - name: Build APK
+        run: |
+          export PATH=$HOME/.local/bin:$PATH
+          # Clear conflicting SDK env vars so Buildozer manages its own
+          unset ANDROID_HOME ANDROID_SDK_ROOT ANDROID_NDK_HOME ANDROID_NDK_ROOT
+          buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
